@@ -9,15 +9,14 @@
 * For all details and documentation:
 *     http://github.com/bunkat/later
 */
-const moment = require('moment-timezone');
 
-later.date.timezone = function(useLocalTime, timezone) {
+later.date.timezone = function(useLocalTime, timezone, converter) {
 
   // configure the date builder used to create new dates in the right timezone
   if (useLocalTime) { 
-    if (timezone) {
+    if (timezone && converter) {
       later.date.build = function(Y, M, D, h, m, s) {
-        return moment.tz([Y, M, D, h, m, s], timezone).toDate();
+        return converter.tz([Y, M, D, h, m, s], timezone).toDate();
       }
     } else {
       later.date.build = function(Y, M, D, h, m, s) { return new Date(Y, M, D, h, m, s); }
@@ -44,7 +43,7 @@ later.date.timezone = function(useLocalTime, timezone) {
 
 // friendly names for available timezones
 later.date.UTC = function() { later.date.timezone(false); };
-later.date.localTime = function(timezone) { later.date.timezone(true, timezone); };
+later.date.localTime = function(timezone, converter) { later.date.timezone(true, timezone, converter); };
 
 // use UTC by default
 later.date.UTC();

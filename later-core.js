@@ -858,12 +858,11 @@ later = function() {
     };
   };
   later.date = {};
-  const moment = require("moment-timezone");
-  later.date.timezone = function(useLocalTime, timezone) {
+  later.date.timezone = function(useLocalTime, timezone, converter) {
     if (useLocalTime) {
-      if (timezone) {
+      if (timezone && converter) {
         later.date.build = function(Y, M, D, h, m, s) {
-          return moment.tz([ Y, M, D, h, m, s ], timezone).toDate();
+          return converter.tz([ Y, M, D, h, m, s ], timezone).toDate();
         };
       } else {
         later.date.build = function(Y, M, D, h, m, s) {
@@ -888,8 +887,8 @@ later = function() {
   later.date.UTC = function() {
     later.date.timezone(false);
   };
-  later.date.localTime = function(timezone) {
-    later.date.timezone(true, timezone);
+  later.date.localTime = function(timezone, converter) {
+    later.date.timezone(true, timezone, converter);
   };
   later.date.UTC();
   later.SEC = 1e3;
